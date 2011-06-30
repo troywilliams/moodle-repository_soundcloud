@@ -1,0 +1,51 @@
+Soundcloud repository plugin for Moodle - version 2.0 beta
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details:
+
+http:www.gnu.org/copyleft/gpl.html
+
+Created by: Troy Williams 
+
+================================================================================
+
+Overview:
+
+SoundCloud is an audio platform that enables anyone to upload, record, promote and 
+share their originally-created sounds across the internet, in a simple, accessible 
+and feature-rich way. From sample to symphony and soundbite to soliloquy, SoundCloud 
+allows sound creators anywhere to instantly record audio on the site or via mobile 
+applications and share them publicly or privately; to embed sound across websites, 
+social networks and blogs and receive feedback from the community.
+
+SoundCloud's open platform also supports a wide range of applications built on the 
+SoundCloud API, enabling everything from mobile voice recording, online mastering, 
+digital distribution to Facebook artist profiles and iPad music making. SoundCloud 
+offers free accounts to amateur creators, with more advanced users able to upgrade 
+to premium accounts for advanced features like statistics, controlled distribution 
+and custom branding.
+
+This repository plugin uses the PHP SoundCloud API wrapper developed by Anton Lindqvist
+
+Features:
+ 
+- Download and link public/private tracks
+- Link to track streams
+
+Next:
+- Add search
+
+Installation:
+
+01) Make a folder called soundcloud under \repository folder so that you have a \repository\soundcloud folder.
+02) Copy the files into the \repository\soundcloud folder.
+03) Go to the \admin page and allow the repository to be installed.
+04) Go to Settings -> Site administration -> Plugins -> Repositories -> Soundcloud to configure, instructions on page.
+
