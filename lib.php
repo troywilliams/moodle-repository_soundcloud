@@ -145,10 +145,7 @@ class repository_soundcloud extends repository {
         $tracks = json_decode($tracks);
         if ($tracks) {
             foreach($tracks as $track) {
-                $filename = $track->title;
-                if (strpos($filename, '.mp3') === false) {
-                    $filename = $filename.'.mp3'; // download file will be MP3, add extension for FileAPI
-                }
+                $filename = $track->title. '.' . $track->original_format; // download will be original file, so use original extension 
                 if (empty($track->artwork_url)){
                     $thumbnail = $OUTPUT->pix_url(file_extension_icon('.'.$track->original_format, 32));
                 } else {
