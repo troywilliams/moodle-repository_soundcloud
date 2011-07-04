@@ -114,12 +114,11 @@ class repository_soundcloud extends repository {
         
         $track = $this->soundcloudapi->get('me/tracks/'.$trackid);
         $track = json_decode($track);
-       
-        $baseurl = $track->user->permalink_url . '/tracks/?' . $track->id; // link to track on Soundcloud, id will allow filter to work
         
-        $url = $baseurl.'#'.$track->title; // add #title so Moodle will add link name
+        $baseurl = $track->permalink_url;
+        $url = $baseurl.'#'.$track->title; // use title for nice naming
         if ($track->sharing === 'private') {
-            $url = $baseurl . '&secret_token='. $track->secret_token . '#' . $track->title; // token will allow filter to work for private track
+            throw new moodle_exception('private tracks cannot currently be streamed','soundcloud');
         }
        
         return $url;
