@@ -118,7 +118,7 @@ class repository_soundcloud extends repository {
         $baseurl = $track->permalink_url;
         $url = $baseurl.'#'.$track->title; // use title for nice naming
         if ($track->sharing === 'private') {
-            throw new moodle_exception('private tracks cannot currently be streamed','soundcloud');
+            $url = $baseurl.'/'.$track->secret_token.'#'.$track->title; // private stream, use title for nice naming
         }
        
         return $url;
