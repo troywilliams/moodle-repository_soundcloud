@@ -220,7 +220,7 @@ class repository_soundcloud extends repository {
         $instances = repository::get_instances($params);
         if (empty($instances)) {
             $redirecturi = get_string('redirecturiwarning', 'repository_soundcloud');
-            $mform->addElement('static', null, '',  $redirect_uri);
+            $mform->addElement('static', null, '',  $redirecturi);
         } else {
             $instance = array_shift($instances);
             $redirecturi = $CFG->wwwroot.'/repository/repository_callback.php?repo_id='.$instance->id;
