@@ -28,7 +28,8 @@
 
 require_once($CFG->dirroot.'/repository/soundcloud/soundcloudapi.php');
 
-class repository_soundcloud extends repository {
+class repository_soundcloud extends repository {    
+    private $pagelimit = 50;
     
     public function __construct($repositoryid, $context = SYSCONTEXTID, $options = array()) {
         global $CFG;
@@ -132,15 +133,31 @@ class repository_soundcloud extends repository {
      * @param type $page
      * @return int 
      */
-    public function get_listing($path='', $page = '') {
+    public function get_listing($path='', $page=1) {
         global $CFG, $OUTPUT;
         
         $ret  = array();
         // log out link will be displayed
         $ret['nologin'] = false;
         $ret['nosearch'] = true;
-        $ret['list'] = array();
-        $tracks = $this->soundcloudapi->get('me/tracks');
+        // Get user, this will contain track totals
+        $me = $this->soundcloudapi->get('me');
+        $me = json_decode($me);
+        // Pagination
+        $ret['perpage'] = $this->pagelimit;
+        $ret['total'] = (int)$me->track_count + (int)$me->private_tracks_count;
+        $ret['pages'] = ceil($ret['total']/$ret['perpage']);
+        if (empty($page)) {
+            $page = 1; 
+        }
+        if ($page <= $ret['pages']) {
+            $ret['page'] = (int)$page;
+        } else {
+            $ret['page'] = 1;
+        }
+        $offset = ($ret['page']-1)*$ret['perpage']; // Soundcloud offset
+        // Get users tracks
+        $tracks = $this->soundcloudapi->get('me/tracks', array('limit'=> $ret['perpage'], 'offset'=>$offset));
         $tracks = json_decode($tracks);
         if ($tracks) {
             foreach($tracks as $track) {
@@ -155,12 +172,13 @@ class repository_soundcloud extends repository {
                                 'thumbnail'=>(string)$thumbnail,
                                 'thumbnail_width'=>64,
                                 'thumbnail_height'=>64,
-                                'size'=>'',
+                                'size'=>'unknown',
+                                'license'=>$track->license,
                                 'date'=>(string)$track->created_at,
                                 'source'=>$track->id
                                 );
             }
-            $ret['list'] = $list;
+            $ret['list'] = $list;           
         }
         
         return $ret;
