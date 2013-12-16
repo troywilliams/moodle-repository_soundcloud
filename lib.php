@@ -25,14 +25,16 @@
  * @author     Troy Williams <troyw@waikato.ac.nz>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-require_once($CFG->dirroot.'/repository/soundcloud/soundcloudapi.php');
-
 class repository_soundcloud extends repository {    
     private $pagelimit = 50;
     
     public function __construct($repositoryid, $context = SYSCONTEXTID, $options = array()) {
         global $CFG;
+
+        // class may be loaded through filter, apparently require_once only looks at paths
+        if (! class_exists('Services_Soundcloud', false)) {
+            require_once($CFG->dirroot.'/repository/soundcloud/soundcloudapi.php');
+        }
         
         // TODO check if empty?
         $this->clientid = get_config('soundcloud', 'clientid');
@@ -83,8 +85,8 @@ class repository_soundcloud extends repository {
      * @param type $filename
      * @return type 
      */
-    public function get_file($trackid, $filename) {
-        
+    public function get_file($url, $filename = '') {
+
         $track = $this->soundcloudapi->get('me/tracks/'.$trackid);
         $track = json_decode($track);
         
@@ -172,9 +174,9 @@ class repository_soundcloud extends repository {
                                 'thumbnail'=>(string)$thumbnail,
                                 'thumbnail_width'=>64,
                                 'thumbnail_height'=>64,
-                                'size'=>'unknown',
+                                'size'=>'',
                                 'license'=>$track->license,
-                                'date'=>(string)$track->created_at,
+                                'date'=>'',
                                 'source'=>$track->id
                                 );
             }
@@ -216,7 +218,7 @@ class repository_soundcloud extends repository {
      * Add Plugin settings input to Moodle form
      * @param object $mform
      */
-    public function type_config_form($mform) {
+    public static function type_config_form($mform, $classname = 'repository') {
         global $CFG;
            
         $clientid = get_config('soundcloud', 'clientid');
@@ -230,7 +232,9 @@ class repository_soundcloud extends repository {
         }
         $strrequired = get_string('required');
         $mform->addElement('text', 'clientid', get_string('clientid', 'repository_soundcloud'), array('value'=>$clientid, 'size'=>'40'));
+        $mform->setType( 'clientid', PARAM_RAW);
         $mform->addElement('text', 'clientsecret', get_string('clientsecret', 'repository_soundcloud'), array('value'=>$clientsecret, 'size'=>'40'));
+        $mform->setType( 'clientsecret', PARAM_RAW);
         // get Soundcloud instances
         $params = array();
         $params['onlyvisible'] = false;
@@ -247,17 +251,31 @@ class repository_soundcloud extends repository {
         $mform->addRule('clientid', $strrequired, 'required', null, 'client');
         $mform->addRule('clientsecret', $strrequired, 'required', null, 'client'); 
     }
-    
+
+    public static function type_form_validation($mform, $data, $errors) {
+        //if (!is_dir($data['rootpath'])) {
+        //    $errors['rootpath'] = get_string('invalidrootpath', 'repository_someplugin');
+        //}
+        $errors = array();
+        return $errors;
+    }
+
+
     /**
      * Need for Soundcloud configuration variables.
      * @return type 
      */
     public static function get_type_option_names() {
-        return array('clientid', 'clientsecret', 'pluginname');
+        return array_merge(parent::get_type_option_names(), array('clientid', 'clientsecret', 'pluginname'));
     }
     
+
+    public function supported_returntypes() {
+        return FILE_EXTERNAL;
+    }
+
     public function supported_filetypes() {
-        return array('web_audio');
+        return '*';
     }
 
 }

@@ -16,16 +16,18 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Version details
- *
- * @package    repository
- * @subpackage souncloud
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+function xmldb_repository_soundcloud_upgrade($oldversion) {
+    global $CFG, $DB;
 
-$plugin->component = 'repository_soundcloud';   // Full name of the plugin (used for diagnostics)
-$plugin->version   = 2013051400;            // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2013051400;            // Requires this Moodle version
-$module->release   = '2.5';                 // Human-friendly version name
-$module->maturity  = MATURITY_BETA;         // This version's maturity level
+    $dbman = $DB->get_manager();
+
+    // Moodle v2.6.0 release upgrade line.
+    // Put any upgrade step following this.
+    if ($oldversion < 2013111800) {
+        //$pluginname = 'mediaplayer_soundcloud';
+        //set_config('classname', 'repository_soundcloud_player', $pluginname);
+        //set_config('enabled', true, $pluginname);
+        upgrade_plugin_savepoint(true, 2013111800, 'repository', 'soundcloud');
+    }
+    return true;
+}
