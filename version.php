@@ -27,5 +27,5 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'repository_soundcloud';   // Full name of the plugin (used for diagnostics)
 $plugin->version   = 2013051400;            // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2013051400;            // Requires this Moodle version
-$module->release   = '2.5';                 // Human-friendly version name
-$module->maturity  = MATURITY_BETA;         // This version's maturity level
+$plugin->release   = '2.5';                 // Human-friendly version name
+$plugin->maturity  = MATURITY_BETA;         // This version's maturity level

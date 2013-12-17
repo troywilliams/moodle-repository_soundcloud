@@ -38,3 +38,4 @@ $string['redirecturiwarning'] = '<ol>
 <li>Get a <a href="http://soundcloud.com/you/apps">Soundcloud Client ID and Client Secret</a> from Soundcloud for this Moodle site.</li>
 <li>Enter those details here, then click Save and then click on Settings to come back to this page.  You will see that Moodle has generated a Redirect URI for you.</li>
 <li>Edit your <a href="http://soundcloud.com/you/apps">Soundcloud</a> application details again and set the Redirect URI.</li></ol>';
+$string['soundcloud:view'] = 'soundcloud:view';
